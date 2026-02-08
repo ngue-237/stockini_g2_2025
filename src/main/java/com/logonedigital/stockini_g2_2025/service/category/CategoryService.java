@@ -10,6 +10,6 @@ public interface CategoryService {
     void addCategory(CategoryReqDto categoryReqDto);
     CategoryResDto getCategoryById (String idCategorie);
     List<CategoryResDto> getAllCategory();
-    void updateCategory (String categoryId, CategoryResDto categoryResDto);
+    void updateCategory (String categoryId, CategoryReqDto categoryReqDto);
     void deleteCategory (String categoryId);
 }
