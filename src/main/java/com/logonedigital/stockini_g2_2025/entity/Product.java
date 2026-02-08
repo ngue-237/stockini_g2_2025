@@ -30,6 +30,12 @@ public class Product {
     public Product() {
     }
 
+    public Product(String name, String description, Double price) {
+        this.name = name;
+        this.description = description;
+        this.price = price;
+    }
+
     public Product(String idProduct, String name, String description, Double price, String slug, Boolean status, LocalDate createdAt, LocalDate updatedAt, Category category) {
         this.idProduct = idProduct;
         this.name = name;
