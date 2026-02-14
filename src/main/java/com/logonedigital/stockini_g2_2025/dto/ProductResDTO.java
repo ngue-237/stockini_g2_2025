@@ -1,5 +1,13 @@
 package com.logonedigital.stockini_g2_2025.dto;
 
+
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
+@NoArgsConstructor
+@Getter
+@Setter
 public class ProductResDTO {
 
     private String idProduct;
@@ -7,9 +15,7 @@ public class ProductResDTO {
     private String description;
     private String slug;
     private Double price;
-
-    public ProductResDTO() {
-    }
+    private Double quantity;
 
     public ProductResDTO(String idProduct, String name, String description, String slug, Double price) {
         this.idProduct = idProduct;
@@ -19,35 +25,14 @@ public class ProductResDTO {
         this.price = price;
     }
 
-    public String getIdProduct() {
-        return idProduct;
-    }
-
-    public void setIdProduct(String idProduct) {
+    public ProductResDTO(String idProduct, String name, String description, String slug, Double price, Double quantity) {
         this.idProduct = idProduct;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
         this.name = name;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
         this.description = description;
-    }
-
-    public Double getPrice() {
-        return price;
-    }
-
-    public void setPrice(Double price) {
+        this.slug = slug;
         this.price = price;
+        this.quantity = quantity;
     }
+
+
 }

@@ -5,9 +5,11 @@ import com.logonedigital.stockini_g2_2025.dto.CustomerResDTO;
 import com.logonedigital.stockini_g2_2025.dto.LocationResDTO;
 import com.logonedigital.stockini_g2_2025.entity.Customer;
 import com.logonedigital.stockini_g2_2025.entity.Location;
+import com.logonedigital.stockini_g2_2025.entity.ProductStock;
 import com.logonedigital.stockini_g2_2025.exception.ResourceNotFoundException;
 import com.logonedigital.stockini_g2_2025.repository.CustomerRepo;
 import com.logonedigital.stockini_g2_2025.repository.LocationRepo;
+import com.logonedigital.stockini_g2_2025.repository.ProductStockRepo;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -20,9 +22,11 @@ public class CustomerServiceImpl implements CustomerService {
     private final CustomerRepo customerRepo;
     private final LocationRepo locationRepo;
 
+
     public CustomerServiceImpl(CustomerRepo customerRepo, LocationRepo locationRepo) {
         this.customerRepo = customerRepo;
         this.locationRepo = locationRepo;
+
     }
 
 
@@ -36,11 +40,14 @@ public class CustomerServiceImpl implements CustomerService {
         customer.setCreatedAt(LocalDate.now());
         customer.setStatus(true);
 
+        //saved location process
         Location location = new Location(customerReqDTO.getLocationReqDTO().getPostalCode(), customerReqDTO.getLocationReqDTO().getTown());
         location.setCreatedAt(LocalDate.now());
         location.setStatus(true);
         Location locationSaved = this.locationRepo.save(location);
         customer.setLocation(locationSaved);
+
+
         this.customerRepo.save(customer);
     }
 

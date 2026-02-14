@@ -73,4 +73,6 @@ public class CustomerReqDTO {
     public void setLocationReqDTO(LocationReqDTO locationReqDTO) {
         this.locationReqDTO = locationReqDTO;
     }
+
+
 }

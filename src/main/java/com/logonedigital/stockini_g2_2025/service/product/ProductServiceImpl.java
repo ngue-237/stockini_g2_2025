@@ -4,8 +4,10 @@ import com.github.slugify.Slugify;
 import com.logonedigital.stockini_g2_2025.dto.ProductReqDTO;
 import com.logonedigital.stockini_g2_2025.dto.ProductResDTO;
 import com.logonedigital.stockini_g2_2025.entity.Product;
+import com.logonedigital.stockini_g2_2025.entity.ProductStock;
 import com.logonedigital.stockini_g2_2025.exception.ResourceNotFoundException;
 import com.logonedigital.stockini_g2_2025.repository.ProductRepo;
+import com.logonedigital.stockini_g2_2025.repository.ProductStockRepo;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -19,9 +21,11 @@ import java.util.List;
 @Service
 public class ProductServiceImpl implements ProductService{
     private final ProductRepo productRepo;
+    private final ProductStockRepo productStockRepo;
 
-    public ProductServiceImpl(ProductRepo productRepo) {
+    public ProductServiceImpl(ProductRepo productRepo, ProductStockRepo productStockRepo) {
         this.productRepo = productRepo;
+        this.productStockRepo = productStockRepo;
     }
 
     @Override
@@ -34,6 +38,10 @@ public class ProductServiceImpl implements ProductService{
         product.setSlug(slg.slugify(productReqDTO.getName()));
         product.setCreatedAt(LocalDate.now());
 
+
+        ProductStock productStockSaved = this.productStockRepo.save(new ProductStock(productReqDTO.getQuantity(), LocalDate.now()));
+        product.setProductStock(productStockSaved);
+
         this.productRepo.save(product);
     }
 
@@ -42,14 +50,25 @@ public class ProductServiceImpl implements ProductService{
         Product product = this.productRepo.findById(idProduct)
                 .orElseThrow(()->new ResourceNotFoundException("Product does'nt exist !"));
 
-        return new ProductResDTO(product.getIdProduct(), product.getName(),
-                product.getDescription(),product.getSlug(), product.getPrice());
+        if(product.getProductStock()==null)
+            return  new ProductResDTO(product.getIdProduct(), product.getName(),
+                    product.getDescription(),product.getSlug(), product.getPrice());
+        else
+            return new ProductResDTO(product.getIdProduct(), product.getName(),
+                    product.getDescription(),product.getSlug(), product.getPrice(), product.getProductStock().getQuantity());
     }
 
     @Override
     public List<ProductResDTO> getAllProduct() {
-        return this.productRepo.findAll().stream().map(product ->new ProductResDTO(product.getIdProduct(), product.getName(),
-                product.getDescription(),product.getSlug(),  product.getPrice())).toList();
+        return this.productRepo.findAll().stream().map(product ->{
+            if(product.getProductStock()==null)
+                return  new ProductResDTO(product.getIdProduct(), product.getName(),
+                        product.getDescription(),product.getSlug(), product.getPrice());
+            else
+                return new ProductResDTO(product.getIdProduct(), product.getName(),
+                        product.getDescription(),product.getSlug(), product.getPrice(), product.getProductStock().getQuantity());
+
+        }).toList();
     }
 
     @Override
